@@ -1,0 +1,7 @@
+#ifndef INSTIGMATA_SAMPLEGRID_H
+#define INSTIGMATA_SAMPLEGRID_H 1
+#include "box.h"
+
+
+
+#endif /* INSTIGMATA_SAMPLEGRID_H */
