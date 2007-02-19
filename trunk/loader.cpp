@@ -3,6 +3,7 @@
 #include <sys/types.h>
 #include <dirent.h>
 #include <vector>
+#include "soundcore.h"
 
 Loader::Loader() 
 	: Box(0, 32, 1024, 736, 0, Box::TYPE_FLAT)
@@ -49,6 +50,7 @@ void Loader::drawDirectories() {
 	memset(title, 0, 23);
 	int i;
 	for(int i = 0; i < dirs.size(); i++){
+		sound->update();
 		strncpy(title, dirs[i]->getName(), 22);
 		if(current_dir == dirs[i])
 			rectfill(screen, 0, i * 40 + 32, 200, i * 40 + 39 + 32, COLOR_SELECTED_DIRECTORY);
@@ -69,6 +71,7 @@ void Loader::drawSamples(){
 	int i;
 
 	for(i = 0; char *sample = current_dir->getSample(i); i++){
+		sound->update();
 		int x = 201 + (i % 4) * 206;
 		int y = i / 4 * 40 + 32;
 		strncpy(title, sample, 22);

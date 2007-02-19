@@ -1,5 +1,6 @@
 #include "soundcore.h"
 #include "soundplayer.h"
+#include "logger.h"
 #include <sys/time.h>
 #include <time.h>
 
@@ -64,7 +65,10 @@ void SoundCore::generateBarEvents() {
 		otime = ntime;
 		return;
 	}
-	if(timer / granularity == 32){
+	if(timer / granularity >= 32){
+		if(timer / granularity > 32) {
+			LOG("(WW) Glitch detected!");
+		}
 		timer = 0;
 		otime = ntime;
 		for(int i = 0; i < players.size(); i++){

@@ -67,6 +67,7 @@ void Box::paint() {
 	for(int i = 0; i < children.size(); i++)
 		children[i]->paint();
 	unscare_mouse();
+	sound->update();
 }
 
 // Don't override this! Override handleMouseEvent instead
