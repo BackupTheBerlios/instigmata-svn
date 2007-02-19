@@ -32,8 +32,8 @@ void Button::setStatus(bool status){
 void Button::paint() {
 	scare_mouse();
 	Box::paint();
-	textprintf_centre_ex(screen, font, x + w / 2 + 4, y + (h / 2) - 1, COLOR_DEFAULT_BUTTONTEXT_SHADOW, -1, "%s", name);
-	textprintf_centre_ex(screen, font, x + w / 2 + 2, y + (h / 2) - 3, COLOR_DEFAULT_BUTTONTEXT, -1, "%s", name);
+	textprintf_centre_ex(screen, font, x + w / 2 + 3, y + (h / 2) - 5, COLOR_DEFAULT_BUTTONTEXT_SHADOW, -1, "%s", name);
+	textprintf_centre_ex(screen, font, x + w / 2 + 1, y + (h / 2) - 7, COLOR_DEFAULT_BUTTONTEXT, -1, "%s", name);
 	unscare_mouse();
 }
 

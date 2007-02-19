@@ -4,7 +4,7 @@ OBJECTS=main.o box.o player.o button.o looper.o image.o selectgroup.o \
 		soundlooper.o barcounter.o slider.o dualslider.o logconv.o \
 		logger.o
 
-CXXFLAGS=`allegro-config --cflags` -I./fmodapi/inc -O3 -march=i686 
+CXXFLAGS=`allegro-config --cflags` -I./fmodapi/inc -O3 -march=i686
 LDFLAGS=`allegro-config --libs --static` fmodapi/lib/libfmodex.so
 CXX=g++
 

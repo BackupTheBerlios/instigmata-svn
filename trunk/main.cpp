@@ -32,6 +32,8 @@ int main(int argc, char *argv[]) {
 	set_gfx_mode(GFX_AUTODETECT_FULLSCREEN, 1024, 768, 0, 0);
 	install_keyboard();
 	install_mouse();
+
+	font = load_font("font.fnt", NULL, NULL);
 	
 	Box workspace(0, 0, 1024, 768, COLOR_PLAYER, Box::TYPE_FLAT);
 

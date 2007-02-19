@@ -11,7 +11,7 @@ Loader::Loader()
 	// Parse the samples directory
 	display = false;
 
-	DIR *dh = opendir("samples");
+	DIR *dh = opendir(SAMPLEDIR);
 	struct dirent *de;
 	struct stat s;
 	while( (de = readdir(dh)) ){

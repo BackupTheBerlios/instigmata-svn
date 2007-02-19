@@ -12,12 +12,15 @@ class Looper
 	EventListener *player;
 	EventListener *looper;
 	EventButton *trigger;
+	char *sampleName;
+	char *dirName;
 	// SoundLooper *looper;
 	public:
 	Looper(int y, int c, EventListener *);
 	void emptyEvent(eventtype et);
 	void strEvent(eventtype et, char *data);
 	void intEvent(eventtype et, int data);
+	void paint();
 };
 
 #endif /* INSTIGMATA_LOOPER_H */

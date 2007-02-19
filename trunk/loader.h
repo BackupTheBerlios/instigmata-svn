@@ -6,6 +6,8 @@
 #include "sampledir.h"
 #include "event.h"
 
+#define SAMPLEDIR "samples"
+
 class Loader : public Box {
 	std::vector<SampleDir *> dirs;
 	SampleDir *current_dir;

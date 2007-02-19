@@ -82,3 +82,4 @@ void SoundLooper::bar() {
 		bars++;
 }
 
+
