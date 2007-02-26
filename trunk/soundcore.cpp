@@ -79,6 +79,8 @@ void SoundCore::init(int tempo, BarCounter *bc) {
 void SoundCore::generateBarEvents() {
 	if(timer / granularity >= 32){
 		if(timer / granularity > 32) {
+			char msg[1024];
+			sprintf(msg, "(WW) Glitch detected! - %i - %i", granularity * 32, timer);
 			LOG("(WW) Glitch detected!");
 		}
 		timer = 0;
