@@ -38,13 +38,13 @@ int main(int argc, char *argv[]) {
 	
 	Box workspace(0, 0, 1024, 768, COLOR_PLAYER, Box::TYPE_FLAT);
 
-	BarCounter bc(900, 16); 
+	BarCounter bc(902, 16); 
 
 	workspace.addChild(new Image(0, 0, 32, 768, "left.bmp"));
 	workspace.addChild(new Image(992, 0, 32, 768, "right.bmp"));
 
 	workspace.addChild(&bc);
-	workspace.addChild(new PeakMeter(900, 50));
+	workspace.addChild(new PeakMeter(907, 50));
 
 	sound->init(162, &bc); // FIXME changing tempo.
 	for(int i = 0; i < NUMBER_PLAYERS; i++){
