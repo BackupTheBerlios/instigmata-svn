@@ -12,7 +12,7 @@
 #include <sys/mman.h>
 #include <sched.h>
 
-#define NUMBER_PLAYERS 7
+#define NUMBER_PLAYERS 8
 
 Loader *loader = new Loader();
 SoundCore *sound = new SoundCore();
@@ -39,12 +39,13 @@ int main(int argc, char *argv[]) {
 
 	BarCounter bc(900, 16); 
 
-	workspace.addChild(new Image(0, 0, 1024, 32, "header.bmp"));
+	workspace.addChild(new Image(0, 0, 32, 768, "left.bmp"));
+	workspace.addChild(new Image(992, 0, 32, 768, "right.bmp"));
 	workspace.addChild(&bc);
 
 	sound->init(162, &bc); // FIXME changing tempo.
 	for(int i = 0; i < NUMBER_PLAYERS; i++){
-		workspace.addChild(new Player(96 * i + 32, COLOR_PLAYER));
+		workspace.addChild(new Player(96 * i, COLOR_PLAYER));
 		sound->update();
 	}
 

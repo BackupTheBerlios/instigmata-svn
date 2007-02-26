@@ -10,6 +10,7 @@ Image::Image(int x, int y, int w, int h, char *img)
 }
 
 void Image::paint(){
+	printf("%i, %i\n", w, h);
 	blit(image, screen, 0, 0, x, y, w + 1, h + 1);
 }
 

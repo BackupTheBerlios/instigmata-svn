@@ -6,7 +6,7 @@
 #include "dualslider.h"
 
 Player::Player(int y, int color) 
-	: Box(0, y, 1024, 96, color, Box::TYPE_BEVEL)
+	: Box(32, y, 850, 96, color, Box::TYPE_BEVEL)
 {
 	player = (SoundPlayer *)sound->registerPlayer(this);
 	for(int i = 0; i < 4; i++){
