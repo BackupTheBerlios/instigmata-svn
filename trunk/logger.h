@@ -12,8 +12,8 @@ class Logger {
 	~Logger();
 };
 
-extern Logger *log; 
+extern Logger *logg; 
 
-#define LOG(msg) log->log(msg)
+#define LOG(msg) logg->log(msg)
 
 #endif

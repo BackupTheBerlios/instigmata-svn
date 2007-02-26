@@ -10,6 +10,7 @@
 class SoundCore {
 	private:
 	std::vector<EventListener *> players;
+	EventListener *peakmeter;
 
 	double otime;
 	int tempo;
@@ -25,6 +26,7 @@ class SoundCore {
 	void generateBarEvents();
 	void update();
 	EventListener *registerPlayer(EventListener *pg);
+	void registerPeakMeter(EventListener *pm);
 };
 
 extern SoundCore *sound;

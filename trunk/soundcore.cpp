@@ -3,6 +3,7 @@
 #include "logger.h"
 #include <sys/time.h>
 #include <time.h>
+#include <math.h>
 
 void ERRCHECK(FMOD_RESULT result)
 {
@@ -15,11 +16,21 @@ void ERRCHECK(FMOD_RESULT result)
 
 int timer = 0;
 int oldtimer = 0;
+float lpeak = 0;
+float rpeak = 0;
 
 FMOD_RESULT F_CALLBACK dspread(FMOD_DSP_STATE *dsp, float *inbuffer, float *outbuffer, unsigned int length, int inchannels,
 int outchannels)
 {
 	memcpy(outbuffer, inbuffer, length * sizeof(float) * inchannels);
+	lpeak = 0;
+	rpeak = 0;
+	for(int i = 0; i < length * inchannels; i += inchannels){
+		if(fabs(inbuffer[i]) > lpeak)
+			lpeak = fabs(inbuffer[i]);
+		if(fabs(inbuffer[i + 1]) > rpeak)
+			rpeak = fabs(inbuffer[i]);
+	}
 	timer += length;	
 }
 
@@ -73,6 +84,10 @@ void SoundCore::generateBarEvents() {
 }
 
 void SoundCore::timerTick(){
+	if(peakmeter != 0) {
+		peakmeter->doubleEvent(EVENT_PEAKMETER_LEFT_CHANNEL, lpeak);
+		peakmeter->doubleEvent(EVENT_PEAKMETER_RIGHT_CHANNEL, rpeak);
+	}
 }
 
 void SoundCore::update() {
@@ -91,3 +106,6 @@ EventListener *SoundCore::registerPlayer(EventListener *pg) {
 	return sp;
 }
 
+void SoundCore::registerPeakMeter(EventListener *pm) {
+	peakmeter = pm;
+}
