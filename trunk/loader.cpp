@@ -6,7 +6,7 @@
 #include "soundcore.h"
 
 Loader::Loader() 
-	: Box(0, 32, 1024, 736, 0, Box::TYPE_FLAT)
+	: Box(0, 0, 1024, 786, 0, Box::TYPE_FLAT)
 {
 	// Parse the samples directory
 	display = false;

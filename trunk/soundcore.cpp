@@ -64,6 +64,12 @@ void SoundCore::init(int tempo, BarCounter *bc) {
 
 	FMOD::DSP *td;
 
+	sound->system->createDSPByType(FMOD_DSP_TYPE_COMPRESSOR, &compressor);
+	compressor->setParameter(FMOD_DSP_COMPRESSOR_ATTACK, 10);
+	// compressor->setParameter(FMOD_DSP_COMPRESSOR_ATTACK, 10);
+
+	system->addDSP(compressor);
+
 	ERRCHECK(system->createDSP(&tdsp, &td));
 	ERRCHECK(system->addDSP(td));
 

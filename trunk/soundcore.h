@@ -7,7 +7,7 @@
 #include <vector>
 #include <pthread.h>
 
-class SoundCore {
+class SoundCore : public EventListener {
 	private:
 	std::vector<EventListener *> players;
 	EventListener *peakmeter;
@@ -19,6 +19,8 @@ class SoundCore {
 	int granularity;
 	int timertick;
 	void timerTick();
+	FMOD::DSP *compressor;
+
 	public:
 	FMOD::System *system;
 	SoundCore();
