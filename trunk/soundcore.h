@@ -16,6 +16,8 @@ class SoundCore {
 	BarCounter *bc;
 	int samplerate;
 	int granularity;
+	int timertick;
+	void timerTick();
 	public:
 	FMOD::System *system;
 	SoundCore();

@@ -14,6 +14,7 @@ void ERRCHECK(FMOD_RESULT result)
 }
 
 int timer = 0;
+int oldtimer = 0;
 
 FMOD_RESULT F_CALLBACK dspread(FMOD_DSP_STATE *dsp, float *inbuffer, float *outbuffer, unsigned int length, int inchannels,
 int outchannels)
@@ -24,6 +25,7 @@ int outchannels)
 
 SoundCore::SoundCore() {
 	otime = 0;
+	timertick = 0;
 }
 
 void SoundCore::init(int tempo, BarCounter *bc) {
@@ -58,19 +60,11 @@ void SoundCore::init(int tempo, BarCounter *bc) {
 }
 
 void SoundCore::generateBarEvents() {
-	struct timeval t;
-	gettimeofday(&t, 0);
-    double ntime = (double)t.tv_sec + (t.tv_usec / 1000000.0);
-	if(!otime){
-		otime = ntime;
-		return;
-	}
 	if(timer / granularity >= 32){
 		if(timer / granularity > 32) {
 			LOG("(WW) Glitch detected!");
 		}
 		timer = 0;
-		otime = ntime;
 		for(int i = 0; i < players.size(); i++){
 			((SoundPlayer *)players[i])->bar();
 		}
@@ -78,9 +72,16 @@ void SoundCore::generateBarEvents() {
 	}
 }
 
+void SoundCore::timerTick(){
+}
+
 void SoundCore::update() {
 	generateBarEvents();
 	ERRCHECK(system->update());
+	if(timer != oldtimer){
+		timerTick();
+		oldtimer = timer;
+	}
 	generateBarEvents();
 }
 
@@ -89,3 +90,4 @@ EventListener *SoundCore::registerPlayer(EventListener *pg) {
 	players.push_back(sp);
 	return sp;
 }
+

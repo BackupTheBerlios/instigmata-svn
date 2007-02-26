@@ -41,6 +41,7 @@ int main(int argc, char *argv[]) {
 
 	workspace.addChild(new Image(0, 0, 32, 768, "left.bmp"));
 	workspace.addChild(new Image(992, 0, 32, 768, "right.bmp"));
+
 	workspace.addChild(&bc);
 
 	sound->init(162, &bc); // FIXME changing tempo.

@@ -14,7 +14,9 @@ typedef enum eventtype {
 	EVENT_CHANGE_DISTORTION,
 
 	EVENT_CHANGE_LOOP_LENGTH,
-	EVENT_CHANGE_LOOP_START
+	EVENT_CHANGE_LOOP_START,
+
+	EVENT_SEND_SPECTRUM_DATA
 };
 
 class EventListener {
@@ -23,5 +25,6 @@ class EventListener {
 	virtual void emptyEvent(eventtype type) {};
 	virtual void intEvent(eventtype type, int data) {};
 	virtual void doubleEvent(eventtype type, double data) {};
+	virtual void voidEvent(eventtype type, void *data) {};
 };
 #endif
