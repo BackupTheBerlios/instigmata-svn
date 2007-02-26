@@ -6,13 +6,15 @@
 #define OPTLPFCO(v) ((v) * 21990.0 + 10)
 #define OPTLPFRE(v) ((v) * 9.0 + 1)
 #define VOLUMECORRECT(v) (v * (1 - 0.99 * vc))
+#define EQCC(v) (v * (22000.0 - 20.0) + 20.0)
+#define EQGC(v) (v * (3.0 - 0.05) + 0.05)
 
 SoundPlayer::SoundPlayer(EventListener *g) {
 	sound->system->createChannelGroup(NULL, &cg);
 
 	sound->system->createDSPByType(FMOD_DSP_TYPE_LOWPASS, &lowpass);
 	sound->system->createDSPByType(FMOD_DSP_TYPE_HIGHPASS, &hipass);
-	sound->system->createDSPByType(FMOD_DSP_TYPE_DISTORTION, &distortion);
+	ERRCHECK(sound->system->createDSPByType(FMOD_DSP_TYPE_PARAMEQ, &eq1));
 	
 	vc = PLAYER_DEFAULT_DISTORTION;
 	vol = PLAYER_DEFAULT_VOLUME;
@@ -20,12 +22,16 @@ SoundPlayer::SoundPlayer(EventListener *g) {
 	cg->addDSP(lowpass);
 	cg->addDSP(hipass);
 	cg->addDSP(distortion);
+//	ERRCHECK(cg->addDSP(eq1));
+
 	cg->setVolume(VOLUMECORRECT(PLAYER_DEFAULT_VOLUME));
 
 	lowpass->setParameter(FMOD_DSP_LOWPASS_CUTOFF, OPTLPFCO(PLAYER_LPF_DEFAULT_CUTOFF));
 	lowpass->setParameter(FMOD_DSP_LOWPASS_RESONANCE, OPTLPFRE(PLAYER_LPF_DEFAULT_RESONANCE));
 	hipass->setParameter(FMOD_DSP_HIGHPASS_CUTOFF, OPTLPFCO(PLAYER_HPF_DEFAULT_CUTOFF));
 	distortion->setParameter(FMOD_DSP_DISTORTION_LEVEL, PLAYER_DEFAULT_DISTORTION);
+	eq1->setParameter(FMOD_DSP_PARAMEQ_CENTER, EQCC(PLAYER_EQ1_DEFAULT_CENTER));
+	eq1->setParameter(FMOD_DSP_PARAMEQ_GAIN, EQGC(PLAYER_EQ1_DEFAULT_GAIN));
 
 	this->gui = g;
 }
@@ -63,5 +69,13 @@ void SoundPlayer::doubleEvent(eventtype et, double data){
 			cg->setVolume(VOLUMECORRECT(vol));
 			distortion->setParameter(FMOD_DSP_DISTORTION_LEVEL, data);
 			break;
+		case EVENT_CHANGE_EQ1_CENTER:
+			eq1->setBypass(false);
+			eq1->setActive(true);
+			ERRCHECK(eq1->setParameter(FMOD_DSP_PARAMEQ_CENTER, EQCC(data)));
+			break;
+		case EVENT_CHANGE_EQ1_GAIN:
+			ERRCHECK(eq1->setParameter(FMOD_DSP_PARAMEQ_CENTER, EQGC(data)));
+			break;	
 	}
 }
