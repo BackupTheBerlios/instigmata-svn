@@ -114,7 +114,7 @@ int main(int argc, char *argv[]) {
 		}
 		usleep(100);
 	}
-	sound->system->release();
+	// sound->system->release();
 	delete logg;
 	set_gfx_mode(GFX_TEXT, 0, 0, 0, 0);
 	return 0;

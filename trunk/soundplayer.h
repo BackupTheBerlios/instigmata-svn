@@ -29,6 +29,7 @@ class SoundPlayer : public EventListener {
 	
 	double vc;
 	double vol;
+	float distgain;
 
 	EventListener *gui;
 	std::vector<SoundLooper *> loopers;
