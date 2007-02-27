@@ -16,11 +16,12 @@ Player::Player(int y, int color)
 	int fxpos = 615;
 	#define addFX(a) addChild(a); fxpos += 33;
 
+	addFX(new Slider(fxpos, "VOL", EVENT_CHANGE_VOLUME, this, PLAYER_DEFAULT_VOLUME, 0.01, SLIDER_LOGARITHMIC));
 	addFX(new DualSlider(fxpos, "LPF", EVENT_CHANGE_LPF_CUTOFF, EVENT_CHANGE_LPF_RESONANCE, this, 
 			PLAYER_LPF_DEFAULT_CUTOFF, PLAYER_LPF_DEFAULT_RESONANCE, 0.01, 0.01, true, true));
 	addFX(new Slider(fxpos, "HPF", EVENT_CHANGE_HPF_CUTOFF, this, PLAYER_HPF_DEFAULT_CUTOFF, 0.01, SLIDER_LOGARITHMIC));
 	addFX(new Slider(fxpos, "DST", EVENT_CHANGE_DISTORTION, this, PLAYER_DEFAULT_DISTORTION, 0.01, SLIDER_ANTILOGARITHMIC));
-	addFX(new Slider(fxpos, "Vol", EVENT_CHANGE_VOLUME, this, PLAYER_DEFAULT_VOLUME, 0.01, SLIDER_LOGARITHMIC));
+	addFX(new Slider(fxpos, "VOL", EVENT_CHANGE_POST_VOLUME, this, PLAYER_DEFAULT_VOLUME, 0.01, SLIDER_LOGARITHMIC));
 	addChild(new Button(fxpos, 3, 33, 24, COLOR_DEFAULT_BUTTON, false, "SLC", player, EVENT_TOGGLE_SLICER));
 	addChild(new Button(fxpos, 27, 33, 24, COLOR_DEFAULT_BUTTON, false, "ECH", player, EVENT_TOGGLE_ECHO));
 	addChild(new Button(fxpos, 51, 33, 24, COLOR_DEFAULT_BUTTON, false, "RVB", player, EVENT_TOGGLE_REVERB));

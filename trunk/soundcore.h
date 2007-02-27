@@ -31,6 +31,7 @@ class SoundCore : public EventListener {
 	void registerPeakMeter(EventListener *pm);
 	int getTempo() { return tempo; }
 	int getSamplerate() { return samplerate; }
+	int *getSlicerCounter();
 };
 
 extern SoundCore *sound;

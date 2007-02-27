@@ -15,10 +15,6 @@ int outchannels)
 			outbuffer[i] = 0;//inbuffer[i] * 0.1;
 			outbuffer[i+1] = 0;//inbuffer[i + 1] * 0.1;
 		}
-		if(counter < slice * 2)
-			counter++;
-		else
-			counter = 0;
 	}
 
 	(*(int *)(dsp->plugindata)) = counter;
@@ -39,16 +35,12 @@ FMOD_RESULT F_CALLBACK sdsprelease(FMOD_DSP_STATE *dsp)
 
 FMOD_RESULT F_CALLBACK sdspcreate(FMOD_DSP_STATE *dsp)
 {
-    dsp->plugindata = malloc(sizeof(int));
-    int *counter = (int *)dsp->plugindata;
-	*counter = 0;
+    dsp->plugindata = (void *)sound->getSlicerCounter();
     return FMOD_OK;
 }
 
 FMOD_RESULT F_CALLBACK sdspreset(FMOD_DSP_STATE *dsp)
 {
-    int *counter = (int *)dsp->plugindata;
-	*counter = 0;
     return FMOD_OK;
 }
 

@@ -3,12 +3,12 @@
 #include "soundlooper.h"
 #include "distortion.h"
 #include "slicer.h"
+#include "amp.h"
 #include <allegro.h>
 #include <math.h>
 
 #define OPTLPFCO(v) ((v) * 21990.0 + 10)
 #define OPTLPFRE(v) ((v) * 9.0 + 1)
-#define VOLUMECORRECT(v) (v * (1 - 0.99 * vc))
 #define EQCC(v) (v * (22000.0 - 20.0) + 20.0)
 #define EQGC(v) (v * (3.0 - 0.05) + 0.05)
 
@@ -23,13 +23,14 @@ SoundPlayer::SoundPlayer(EventListener *g) {
 	
 	vc = PLAYER_DEFAULT_DISTORTION;
 	vol = PLAYER_DEFAULT_VOLUME;
-
 	
 	cg->setVolume(PLAYER_DEFAULT_VOLUME);
 
 	distortion = getDistortion();
 	slicer = getSlicer();
+	amp = getAmp();
 	
+	cg->addDSP(amp);
 	cg->addDSP(reverb);
 	cg->addDSP(echo);
 	cg->addDSP(lowpass);
@@ -51,6 +52,7 @@ SoundPlayer::SoundPlayer(EventListener *g) {
 	lowpass->setParameter(FMOD_DSP_LOWPASS_RESONANCE, OPTLPFRE(PLAYER_LPF_DEFAULT_RESONANCE));
 	hipass->setParameter(FMOD_DSP_HIGHPASS_CUTOFF, OPTLPFCO(PLAYER_HPF_DEFAULT_CUTOFF));
 	distortion->setParameter(0, PLAYER_DEFAULT_DISTORTION);
+	amp->setParameter(0, PLAYER_DEFAULT_VOLUME);
 
 	this->gui = g;
 }
@@ -86,8 +88,10 @@ void SoundPlayer::boolEvent(eventtype et, bool data) {
 void SoundPlayer::doubleEvent(eventtype et, double data){
 	switch(et){
 		case EVENT_CHANGE_VOLUME:
-			cg->setVolume(VOLUMECORRECT(data));
-			vol = data;
+			cg->setVolume(data);
+			break;
+		case EVENT_CHANGE_POST_VOLUME:
+			amp->setParameter(0, data);
 			break;
 		case EVENT_CHANGE_LPF_CUTOFF:
 			lowpass->setParameter(FMOD_DSP_LOWPASS_CUTOFF, OPTLPFCO(data));

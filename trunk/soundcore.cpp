@@ -15,6 +15,7 @@ void ERRCHECK(FMOD_RESULT result)
 }
 
 int timer = 0;
+int slicercounter = 0;
 int oldtimer = 0;
 float lpeak = 0;
 float rpeak = 0;
@@ -30,6 +31,11 @@ int outchannels)
 			lpeak = fabs(inbuffer[i]);
 		if(fabs(inbuffer[i + 1]) > rpeak)
 			rpeak = fabs(inbuffer[i]);
+		slicercounter++;
+		if(slicercounter >= (int)((60.0 / sound->getTempo() / 4 * sound->getSamplerate()) * 2)) {
+			slicercounter = 0;
+		}
+
 	}
 	timer += length;	
 }
@@ -38,7 +44,9 @@ SoundCore::SoundCore() {
 	otime = 0;
 	timertick = 0;
 }
-
+int *SoundCore::getSlicerCounter() {
+	return &slicercounter;
+}
 void SoundCore::init(int tempo, BarCounter *bc) {
 	this->tempo = tempo;
 	this->bc = bc;

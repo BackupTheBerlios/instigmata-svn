@@ -2,9 +2,9 @@ TARGET=instigmata
 OBJECTS=main.o box.o player.o button.o looper.o image.o selectgroup.o \
 		loader.o soundcore.o soundplayer.o sampledir.o eventbutton.o \
 		soundlooper.o barcounter.o slider.o dualslider.o logconv.o \
-		logger.o peakmeter.o distortion.o slicer.o
+		logger.o peakmeter.o distortion.o slicer.o amp.o
 
-CXXFLAGS=`allegro-config --cflags` -I./fmodapi/inc -march=i686 -g
+CXXFLAGS=`allegro-config --cflags` -I./fmodapi/inc -march=i686 -g -mfpmath=sse -msse -O3
 LDFLAGS=`allegro-config --libs --static` fmodapi/lib/libfmodex.so
 CXX=g++
 

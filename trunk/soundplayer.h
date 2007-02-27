@@ -26,6 +26,7 @@ class SoundPlayer : public EventListener {
 	FMOD::DSP *slicer;
 	FMOD::DSP *echo;
 	FMOD::DSP *reverb;
+	FMOD::DSP *amp;
 	
 	double vc;
 	double vol;
