@@ -92,9 +92,11 @@ void SoundCore::generateBarEvents() {
 }
 
 void SoundCore::timerTick(){
-	if(peakmeter != 0) {
+	timertick++;
+	if(peakmeter != 0 && timertick > 3) {
 		peakmeter->doubleEvent(EVENT_PEAKMETER_LEFT_CHANNEL, lpeak);
 		peakmeter->doubleEvent(EVENT_PEAKMETER_RIGHT_CHANNEL, rpeak);
+		timertick = 0;
 	}
 }
 
