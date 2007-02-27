@@ -28,6 +28,7 @@ Looper::Looper(int x, int color, EventListener *player)
 
 void Looper::strEvent(eventtype et, char *data) {
 	// currently catches only sample load
+	quePaint();
 	looper->strEvent(EVENT_SAMPLE_LOAD, data);
 	if(sampleName != 0)
 		free(sampleName);

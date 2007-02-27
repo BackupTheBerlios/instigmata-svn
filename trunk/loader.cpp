@@ -10,6 +10,8 @@ Loader::Loader()
 {
 	// Parse the samples directory
 	display = false;
+	
+	dbuf = 0;
 
 	DIR *dh = opendir(SAMPLEDIR);
 	struct dirent *de;
@@ -53,12 +55,12 @@ void Loader::drawDirectories() {
 		sound->update();
 		strncpy(title, dirs[i]->getName(), 22);
 		if(current_dir == dirs[i])
-			rectfill(screen, 0, i * 40 + 32, 200, i * 40 + 39 + 32, COLOR_SELECTED_DIRECTORY);
+			rectfill(dbuf, 0, i * 40 + 32, 200, i * 40 + 39 + 32, COLOR_SELECTED_DIRECTORY);
 		else
-			rectfill(screen, 0, i * 40 + 32, 200, i * 40 + 39 + 32, COLOR_DEFAULT_DIRECTORY);
+			rectfill(dbuf, 0, i * 40 + 32, 200, i * 40 + 39 + 32, COLOR_DEFAULT_DIRECTORY);
 
-		textprintf_ex(screen, font, 10, i * 40 + 32 + 15, makecol(255,255,255), -1, "%s", title); 
-		rect(screen, 0, i * 40 + 32, 200, i * 40 + 39 + 32, 0);
+		textprintf_ex(dbuf, font, 10, i * 40 + 32 + 15, makecol(255,255,255), -1, "%s", title); 
+		rect(dbuf, 0, i * 40 + 32, 200, i * 40 + 39 + 32, 0);
 	}
 }
 
@@ -76,9 +78,9 @@ void Loader::drawSamples(){
 		int y = i / 4 * 40 + 32;
 		strncpy(title, sample, 22);
 
-		rectfill(screen, x, y, x + 206, y + 40, COLOR_SAMPLE_FILE);
-		textprintf_ex(screen, font, x + 10, y + 15, makecol(255,255,255), -1, "%s", title); 
-		rect(screen, x, y, x + 206, y + 40, 0);
+		rectfill(dbuf, x, y, x + 206, y + 40, COLOR_SAMPLE_FILE);
+		textprintf_ex(dbuf, font, x + 10, y + 15, makecol(255,255,255), -1, "%s", title); 
+		rect(dbuf, x, y, x + 206, y + 40, 0);
 	}
 	numsamples = i;
 }
@@ -93,7 +95,6 @@ void Loader::chooseSample(int i){
 void Loader::getSample(EventListener *s){
 	demander = s;
 	display = true;
-	paint();
 } 
 
 bool Loader::handleMouseEvent(int x, int y, int b){
@@ -115,10 +116,13 @@ bool Loader::handleMouseEvent(int x, int y, int b){
 }
 
 void Loader::paint() {
+	if(!dbuf)
+		dbuf = create_bitmap(1024, 768);
 	scare_mouse();
-	Box::paint(); // Too lazy to use the normal GUI, also hoping to speed things up...
+	clear_to_color(dbuf, 0);
 	drawDirectories();
 	drawSamples();
+	blit(dbuf, screen, 0, 0, 0, 0, 1024, 768);
 	unscare_mouse();
 }
 

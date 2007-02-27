@@ -36,6 +36,8 @@ int main(int argc, char *argv[]) {
 
 	font = load_font("font.fnt", NULL, NULL);
 	
+	BITMAP *wsbuffer = create_bitmap(1024, 768);
+
 	Box workspace(0, 0, 1024, 768, COLOR_PLAYER, Box::TYPE_FLAT);
 
 	BarCounter bc(902, 16); 
@@ -69,7 +71,7 @@ int main(int argc, char *argv[]) {
 
 	while(!(key[KEY_LSHIFT] && key[KEY_LCONTROL] && key[KEY_ESC])){
 		sound->update();
-		workspace.paintIfNeeded();
+	
 		bc.paintIfNeeded();
 		// Screenshot
 		if(key[KEY_F12] && !taking_screenshot){
@@ -81,12 +83,24 @@ int main(int argc, char *argv[]) {
 	
 
 		if(loader->needsDisplay()){
-			wsneedsredraw = true;
+			if(!wsneedsredraw){
+				scare_mouse();
+				blit(screen, wsbuffer, 0, 0, 0, 0, 1024, 768);
+				workspace.paintIfNeeded();
+				unscare_mouse();
+				loader->paint();
+				wsneedsredraw = true;
+			}
 			if(key[KEY_ESC])
 				loader->cancelDisplay();
 		} else if(wsneedsredraw) {
-			workspace.paint();
+			scare_mouse();
+			blit(wsbuffer, screen, 0, 0, 0, 0, 1024, 768);
+			bc.paint();
+			unscare_mouse();
 			wsneedsredraw = false;
+		} else {
+			workspace.paintIfNeeded();
 		}
 		
 		if((mouse_b) && !mbdown) {
@@ -112,6 +126,7 @@ int main(int argc, char *argv[]) {
 					workspace.dragEvent(dragstart_x, dragstart_y, mickey_x, mickey_y);
 			}
 		}
+
 		usleep(100);
 	}
 	// sound->system->release();

@@ -16,6 +16,7 @@ class Loader : public Box {
 	int numsamples;
 	bool display;
 	void chooseSample(int i);
+	BITMAP *dbuf;
 	public:
 	Loader();
 	bool needsDisplay();

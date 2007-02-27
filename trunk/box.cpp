@@ -60,6 +60,7 @@ void Box::paint() {
 	sound->update();
 	scare_mouse();
 	rectfill(screen, x, y, x+w, y+h, color);
+	sound->update();
 	line(screen, x, y, x+w, y, modifyColor(color, CONTRAST));
 	line(screen, x, y, x, y+h, modifyColor(color, CONTRAST));
 	line(screen, x, y+h, x+w, y+h, modifyColor(color, -CONTRAST));
