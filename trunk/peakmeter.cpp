@@ -25,16 +25,18 @@ void PeakMeter::paint() {
 			line(screen, x + 15, y + 10 + i, x + 45,  y + 10 + i, 0);
 	}
 
-	if(lp > 0.0001) {
-		double v = (10.0 * log10(lp) * 2.0) / -80.0;
+	double v;
+	v = (10.0 * log10(lp) * 2.0) / -80.0;
+	if((210 * v + 70) < 270) {
 		rectfill(screen, x + 20, (int)(y + 210 * v + 70), 
 						 x + 27, y + 270,
 				COLOR_SLIDER
 		);
 	}
 
-	if(rp > 0.0001) {
-		double v = (10.0 * log10(rp) * 2.0) / -80.0;
+
+	v = (10.0 * log10(rp) * 2.0) / -80.0;
+	if((210 * v + 70) < 270) {
 		rectfill(screen, x + 33, (int)(y + 210 * v + 70), 
 						 x + 40, y + 270,
 				COLOR_SLIDER
