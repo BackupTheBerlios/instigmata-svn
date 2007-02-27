@@ -23,6 +23,7 @@ class SoundPlayer : public EventListener {
 	FMOD::DSP *lowpass;
 	FMOD::DSP *hipass;
 	FMOD::DSP *distortion;
+	FMOD::DSP *slicer;
 	FMOD::DSP *eq1;
 	FMOD::DSP *eq2;
 	FMOD::DSP *eq3;
@@ -38,6 +39,7 @@ class SoundPlayer : public EventListener {
 	SoundPlayer(EventListener *);
 	EventListener *registerLooper(EventListener *g);
 	void doubleEvent(eventtype et, double data);
+	void boolEvent(eventtype et, bool data);
 	void bar();
 };
 

@@ -29,6 +29,8 @@ class SoundCore : public EventListener {
 	void update();
 	EventListener *registerPlayer(EventListener *pg);
 	void registerPeakMeter(EventListener *pm);
+	int getTempo() { return tempo; }
+	int getSamplerate() { return samplerate; }
 };
 
 extern SoundCore *sound;

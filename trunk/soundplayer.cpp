@@ -1,6 +1,8 @@
-		#include "soundplayer.h"
+#include "soundplayer.h"
 #include "soundcore.h"
 #include "soundlooper.h"
+#include "distortion.h"
+#include "slicer.h"
 #include <allegro.h>
 #include <math.h>
 
@@ -10,61 +12,6 @@
 #define EQCC(v) (v * (22000.0 - 20.0) + 20.0)
 #define EQGC(v) (v * (3.0 - 0.05) + 0.05)
 
-FMOD_DSP_DESCRIPTION ddsp;
-
-FMOD_RESULT F_CALLBACK dspdistortion(FMOD_DSP_STATE *dsp, float *inbuffer, float *outbuffer, unsigned int length, int inchannels,
-int outchannels)
-{
-	float drive = *((float *)dsp->plugindata);
-/*	if(drive == 0) {
-		memcpy(outbuffer, inbuffer, length * sizeof(float) * inchannels);
-		return FMOD_OK; // Bypass
-	}*/
-
-	for(int i = 0; i < length * inchannels; i += inchannels){
-		 float mult=pow(10,drive*drive*3.0)-1.0+0.001;
-	     float div=1.0+drive*8;
-    	 outbuffer[i]=atan(inbuffer[i]*mult)/atan(mult);
-	     outbuffer[i+1]=atan(inbuffer[i+1]*mult)/atan(mult);
-    	 outbuffer[i]/=div;
-	     outbuffer[i+1]/=div;
-	}
-	return FMOD_OK;
-}
-
-
-FMOD_RESULT F_CALLBACK dsprelease(FMOD_DSP_STATE *dsp)
-{
-    float *gain = (float *)dsp->plugindata;
-
-    free(gain);
-
-    return FMOD_OK;
-}
-
-
-FMOD_RESULT F_CALLBACK dspcreate(FMOD_DSP_STATE *dsp)
-{
-    dsp->plugindata = malloc(sizeof(float));
-
-    return FMOD_OK;
-}
-
-
-FMOD_RESULT F_CALLBACK dspsetparam(FMOD_DSP_STATE *dsp, int index, float value)
-{
-    float *gain = (float *)dsp->plugindata;
-
-    switch (index)
-    {
-        case 0:
-        {
-            (*gain) = value;
-            break;
-        }
-    }
-    return FMOD_OK;
-}
 
 SoundPlayer::SoundPlayer(EventListener *g) {
 	sound->system->createChannelGroup(NULL, &cg);
@@ -78,32 +25,13 @@ SoundPlayer::SoundPlayer(EventListener *g) {
 
 	cg->addDSP(lowpass);
 	cg->addDSP(hipass);
-//	cg->addDSP(distortion);
-//	ERRCHECK(cg->addDSP(eq1));
 
-
-
-	memset(&ddsp, 0, sizeof(ddsp));
-
-	FMOD_DSP_PARAMETERDESC *pdsc = (FMOD_DSP_PARAMETERDESC *)malloc(sizeof(FMOD_DSP_PARAMETERDESC));
-
-	memset(pdsc, 0, sizeof(ddsp));
-
-	pdsc->min = 0;
-	pdsc->max = 1;
-	pdsc->defaultval = 0;
-
-	strcpy(ddsp.name, "Distortion");
-	ddsp.read = dspdistortion;
-	ddsp.create = dspcreate;
-	ddsp.setparameter = dspsetparam;
-	ddsp.release = dsprelease;
-	ddsp.numparameters = 1;
-	ddsp.paramdesc = pdsc;
+	distortion = getDistortion();
+	slicer = getSlicer();
 	
-	ERRCHECK(sound->system->createDSP(&ddsp, &distortion));
-
 	ERRCHECK(cg->addDSP(distortion));
+	ERRCHECK(cg->addDSP(slicer));
+	slicer->setBypass(true);
 
 	cg->setVolume(VOLUMECORRECT(PLAYER_DEFAULT_VOLUME));
 
@@ -129,6 +57,16 @@ void SoundPlayer::bar() {
 	}
 }
 
+void SoundPlayer::boolEvent(eventtype et, bool data) {
+	switch(et){
+		case EVENT_TOGGLE_SLICER:
+			slicer->setBypass(!data);
+			break;
+		default:
+			break;
+	}
+}
+
 void SoundPlayer::doubleEvent(eventtype et, double data){
 	switch(et){
 		case EVENT_CHANGE_VOLUME:
@@ -149,7 +87,7 @@ void SoundPlayer::doubleEvent(eventtype et, double data){
 			break;
 		case EVENT_CHANGE_EQ1_CENTER:
 			eq1->setBypass(false);
-			eq1->setActive(true);
+			eq1->setBypass(true);
 			ERRCHECK(eq1->setParameter(FMOD_DSP_PARAMEQ_CENTER, EQCC(data)));
 			break;
 		case EVENT_CHANGE_EQ1_GAIN:

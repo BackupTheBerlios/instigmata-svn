@@ -6,6 +6,16 @@ Button::Button(int x, int y, int w, int h, int c, bool status, char *name)
 {
 	this->name   = strdup(name);
 	this->status = status;
+	this->listener = 0;
+}
+
+Button::Button(int x, int y, int w, int h, int c, bool status, char *name, EventListener *listener, eventtype et) 
+	: Box(x, y, w, h, c, status?Box::TYPE_GRAVE:Box::TYPE_BEVEL)
+{
+	this->name   = strdup(name);
+	this->status = status;
+	this->listener = listener;
+	this->et = et;
 }
 
 void Button::changeType(){
@@ -13,7 +23,8 @@ void Button::changeType(){
 		type = TYPE_GRAVE;
 	else
 		type = TYPE_BEVEL;
-	paint();
+	listener->boolEvent(et, status);
+	quePaint();
 }
 
 bool Button::handleMouseEvent(int x, int y, int b){

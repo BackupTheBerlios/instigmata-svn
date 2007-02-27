@@ -24,7 +24,9 @@ typedef enum eventtype {
 	EVENT_COMPRESSOR_RELEASE,
 	
 	EVENT_CHANGE_EQ1_CENTER,
-	EVENT_CHANGE_EQ1_GAIN
+	EVENT_CHANGE_EQ1_GAIN,
+
+	EVENT_TOGGLE_SLICER
 };
 
 class EventListener {
@@ -34,5 +36,6 @@ class EventListener {
 	virtual void intEvent(eventtype type, int data) {};
 	virtual void doubleEvent(eventtype type, double data) {};
 	virtual void voidEvent(eventtype type, void *data) {};
+	virtual void boolEvent(eventtype type, bool data) {};
 };
 #endif

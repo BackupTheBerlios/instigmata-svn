@@ -4,6 +4,7 @@
 #include "soundcore.h"
 #include "slider.h"
 #include "dualslider.h"
+#include "button.h"
 
 Player::Player(int y, int color) 
 	: Box(32, y, 850, 96, color, Box::TYPE_BEVEL)
@@ -20,12 +21,10 @@ Player::Player(int y, int color)
 	addFX(new Slider(fxpos, "HPF", EVENT_CHANGE_HPF_CUTOFF, this, PLAYER_HPF_DEFAULT_CUTOFF, 0.01, SLIDER_LOGARITHMIC));
 	addFX(new Slider(fxpos, "DST", EVENT_CHANGE_DISTORTION, this, PLAYER_DEFAULT_DISTORTION, 0.01, SLIDER_ANTILOGARITHMIC));
 	addFX(new Slider(fxpos, "Vol", EVENT_CHANGE_VOLUME, this, PLAYER_DEFAULT_VOLUME, 0.01, SLIDER_LOGARITHMIC));
-//	addFX(new DualSlider(fxpos, "EQ1", EVENT_CHANGE_EQ1_CENTER, EVENT_CHANGE_EQ1_GAIN, this, 
-//			PLAYER_EQ1_DEFAULT_CENTER, PLAYER_EQ1_DEFAULT_GAIN, 0.01, 0.01, true, true));
+	addChild(new Button(fxpos, 3, 33, 33, COLOR_DEFAULT_BUTTON, false, "SLC", player, EVENT_TOGGLE_SLICER));
 
 }
 
 void Player::doubleEvent(eventtype et, double data) {
 	player->doubleEvent(et, data); // Pass to soundplayer
 }
-
