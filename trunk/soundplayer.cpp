@@ -18,28 +18,38 @@ SoundPlayer::SoundPlayer(EventListener *g) {
 
 	sound->system->createDSPByType(FMOD_DSP_TYPE_LOWPASS, &lowpass);
 	sound->system->createDSPByType(FMOD_DSP_TYPE_HIGHPASS, &hipass);
-	ERRCHECK(sound->system->createDSPByType(FMOD_DSP_TYPE_PARAMEQ, &eq1));
+	sound->system->createDSPByType(FMOD_DSP_TYPE_ECHO, &echo);
+	sound->system->createDSPByType(FMOD_DSP_TYPE_REVERB, &reverb);
 	
 	vc = PLAYER_DEFAULT_DISTORTION;
 	vol = PLAYER_DEFAULT_VOLUME;
 
-	cg->addDSP(lowpass);
-	cg->addDSP(hipass);
+	
+	cg->setVolume(PLAYER_DEFAULT_VOLUME);
 
 	distortion = getDistortion();
 	slicer = getSlicer();
 	
+	cg->addDSP(reverb);
+	cg->addDSP(echo);
+	cg->addDSP(lowpass);
+	cg->addDSP(hipass);
 	ERRCHECK(cg->addDSP(distortion));
 	ERRCHECK(cg->addDSP(slicer));
-	slicer->setBypass(true);
 
-	cg->setVolume(VOLUMECORRECT(PLAYER_DEFAULT_VOLUME));
+	slicer->setBypass(true);
+	echo->setBypass(true);
+	reverb->setBypass(true);
+	
+	printf("Echo delay is: %f", 60.0 / (float)sound->getTempo() * 1000 / 2);
+
+	echo->setParameter(FMOD_DSP_ECHO_DELAY, 60.0 / (float)sound->getTempo() * 1000 / 2);
+	echo->setParameter(FMOD_DSP_ECHO_WETMIX, 0.4);
+	echo->setParameter(FMOD_DSP_ECHO_DRYMIX, 1);
 
 	lowpass->setParameter(FMOD_DSP_LOWPASS_CUTOFF, OPTLPFCO(PLAYER_LPF_DEFAULT_CUTOFF));
 	lowpass->setParameter(FMOD_DSP_LOWPASS_RESONANCE, OPTLPFRE(PLAYER_LPF_DEFAULT_RESONANCE));
 	hipass->setParameter(FMOD_DSP_HIGHPASS_CUTOFF, OPTLPFCO(PLAYER_HPF_DEFAULT_CUTOFF));
-	eq1->setParameter(FMOD_DSP_PARAMEQ_CENTER, EQCC(PLAYER_EQ1_DEFAULT_CENTER));
-	eq1->setParameter(FMOD_DSP_PARAMEQ_GAIN, EQGC(PLAYER_EQ1_DEFAULT_GAIN));
 	distortion->setParameter(0, PLAYER_DEFAULT_DISTORTION);
 
 	this->gui = g;
@@ -61,6 +71,12 @@ void SoundPlayer::boolEvent(eventtype et, bool data) {
 	switch(et){
 		case EVENT_TOGGLE_SLICER:
 			slicer->setBypass(!data);
+			break;
+		case EVENT_TOGGLE_ECHO:
+			echo->setBypass(!data);
+			break;
+		case EVENT_TOGGLE_REVERB:
+			reverb->setBypass(!data);
 			break;
 		default:
 			break;
@@ -85,13 +101,5 @@ void SoundPlayer::doubleEvent(eventtype et, double data){
 		case EVENT_CHANGE_DISTORTION:
 			distortion->setParameter(0, data);
 			break;
-		case EVENT_CHANGE_EQ1_CENTER:
-			eq1->setBypass(false);
-			eq1->setBypass(true);
-			ERRCHECK(eq1->setParameter(FMOD_DSP_PARAMEQ_CENTER, EQCC(data)));
-			break;
-		case EVENT_CHANGE_EQ1_GAIN:
-			ERRCHECK(eq1->setParameter(FMOD_DSP_PARAMEQ_CENTER, EQGC(data)));
-			break;	
 	}
 }

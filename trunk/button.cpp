@@ -23,7 +23,8 @@ void Button::changeType(){
 		type = TYPE_GRAVE;
 	else
 		type = TYPE_BEVEL;
-	listener->boolEvent(et, status);
+	if(listener)
+		listener->boolEvent(et, status);
 	quePaint();
 }
 

@@ -4,7 +4,7 @@
 FMOD_RESULT F_CALLBACK sdspread(FMOD_DSP_STATE *dsp, float *inbuffer, float *outbuffer, unsigned int length, int inchannels,
 int outchannels)
 {
-	int slice = (int)(60.0 / sound->getTempo() / 8 * sound->getSamplerate());
+	int slice = (int)(60.0 / sound->getTempo() / 4 * sound->getSamplerate());
     int counter = *(int *)(dsp->plugindata);
 
 	for(int i = 0; i < length * inchannels; i += inchannels){
