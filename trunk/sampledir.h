@@ -9,7 +9,7 @@ class SampleDir {
 	char *title;
 	
 	public:
-	SampleDir(char *d);
+	SampleDir(const char *d);
  	char *getSample(int i);
 	char *getName() { return title; }
 };

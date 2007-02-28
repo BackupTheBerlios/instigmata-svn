@@ -3,6 +3,8 @@
 #include <sys/types.h>
 #include <dirent.h>
 #include <vector>
+#include <list>
+#include <string>
 #include "soundcore.h"
 
 Loader::Loader() 
@@ -16,17 +18,27 @@ Loader::Loader()
 	DIR *dh = opendir(SAMPLEDIR);
 	struct dirent *de;
 	struct stat s;
+	std::list<std::string> dirlist;
+
 	while( (de = readdir(dh)) ){
 		if(de->d_type != DT_DIR) // Only count directories
 			continue;
 		if(de->d_name[0] == '.') // Skip dirs starting with dot
 			continue;
-		addDir(de->d_name);
+		
+		dirlist.push_back(de->d_name);
+
 		printf("%s\n", de->d_name);
 	}
 	closedir(dh);
 
-	printf("We have %i sample dirs\n", dirs.size());
+	dirlist.sort();
+
+	while(dirlist.size() > 0) {
+		std::string str = dirlist.front();
+		addDir(str.c_str());
+		dirlist.pop_front();
+	}
 
 	if(dirs.size())
 		current_dir = dirs[0];
@@ -34,7 +46,7 @@ Loader::Loader()
 		current_dir = 0;
 }
 
-bool Loader::addDir(char *d){
+bool Loader::addDir(const char *d){
 	dirs.push_back(new SampleDir(d));
 	return true;
 }

@@ -12,7 +12,7 @@ class Loader : public Box {
 	std::vector<SampleDir *> dirs;
 	SampleDir *current_dir;
 	EventListener *demander;
-	bool addDir(char *d);
+	bool addDir(const char *d);
 	int numsamples;
 	bool display;
 	void chooseSample(int i);
