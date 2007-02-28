@@ -106,6 +106,9 @@ void SoundCore::timerTick(){
 		peakmeter->doubleEvent(EVENT_PEAKMETER_RIGHT_CHANNEL, rpeak);
 		timertick = 0;
 	}
+	for(int i = 0; i < tls.size(); i++){
+		tls[i]->emptyEvent(EVENT_TICK);
+	}
 }
 
 void SoundCore::update() {
@@ -126,4 +129,8 @@ EventListener *SoundCore::registerPlayer(EventListener *pg) {
 
 void SoundCore::registerPeakMeter(EventListener *pm) {
 	peakmeter = pm;
+}
+
+void SoundCore::registerTickListener(EventListener *tl) {
+	tls.push_back(tl);
 }

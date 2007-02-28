@@ -37,6 +37,9 @@ DualSlider::DualSlider(int x, char *text, eventtype et, eventtype et2, EventList
 	} else
 		this->value2 = val2;
 
+	recording = false;
+	playback = false;
+	sound->registerTickListener(this);
 }
 
 void DualSlider::paint(){
@@ -46,6 +49,12 @@ void DualSlider::paint(){
 	textprintf_centre_ex(screen, font, x + w / 2 + 2, y + 1, COLOR_DEFAULT_BUTTONTEXT, -1, "%s", text);
 	rectfill(screen, x + 2, y + 86 - (int)(72 * value), x + 14, y + 86, COLOR_SLIDER);
 	rectfill(screen, x + 15, y + 86 - (int)(72 * value2), x + 26, y + 86, COLOR_SLIDER2);
+
+	if(recording) {
+		line(screen, x + 2, y + 86 - (int)(72 * sval1), x + 14, y + 86 - (int)(72 * sval1), 0);
+		line(screen, x + 15, y + 86 - (int)(72 * sval2), x + 26, y + 86 - (int)(72 * sval2), 0);
+	}
+
 	line(screen, x + 14, y + 14, x + 14, y + 86, 0);
 	rect(screen, x + 2, y + 14, x + 26, y + 86, 0);
 	unscare_mouse();
@@ -82,3 +91,50 @@ bool DualSlider::handleDragEvent(int x, int y, int mx, int my) {
 	paint();
 	return true;
 }
+
+bool DualSlider::handleMouseEvent(int x, int y, int b) {
+	playback = false;
+	recording = false;
+	if(b&2) {
+		recording = true;
+		sval1 = value;
+		sval2 = value2;
+		record1.clear();
+		record2.clear();
+	}
+}
+
+void DualSlider::emptyEvent(eventtype et) {
+	if(et == EVENT_TICK){
+		if(recording){
+			if(!(mouse_b&2)) {
+				recording = false;
+				playback = true;
+				quePaint();
+				return;
+			}
+			record1.push_back(value);
+			record2.push_back(value2);
+			rp1 = 0;
+			rp2 = 0;
+		} 
+		if(playback) {
+			if(record1.size()){
+				value = record1[rp1];
+				listener->doubleEvent(this->et, islogarithmic?toLogarithmic(value):value);
+				rp1++;
+				if(rp1 == record1.size())
+					rp1 = 0;
+			}
+			if(record1.size()){
+				value2 = record2[rp2];
+				listener->doubleEvent(this->et2, islogarithmic2?toLogarithmic(value2):value2);
+				rp2++;
+				if(rp2 == record2.size())
+					rp2 = 0;
+			}
+			quePaint();
+		}	
+	}
+}
+

@@ -12,6 +12,8 @@ class SoundCore : public EventListener {
 	std::vector<EventListener *> players;
 	EventListener *peakmeter;
 
+	std::vector<EventListener *> tls;
+
 	double otime;
 	int tempo;
 	BarCounter *bc;
@@ -32,6 +34,7 @@ class SoundCore : public EventListener {
 	int getTempo() { return tempo; }
 	int getSamplerate() { return samplerate; }
 	int *getSlicerCounter();
+	void registerTickListener(EventListener *tl);
 };
 
 extern SoundCore *sound;
