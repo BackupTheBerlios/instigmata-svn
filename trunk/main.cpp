@@ -97,6 +97,7 @@ int main(int argc, char *argv[]) {
 			scare_mouse();
 			blit(wsbuffer, screen, 0, 0, 0, 0, 1024, 768);
 			bc.paint();
+			workspace.paintIfNeeded();
 			unscare_mouse();
 			wsneedsredraw = false;
 		} else {

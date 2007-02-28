@@ -27,8 +27,6 @@ Loader::Loader()
 			continue;
 		
 		dirlist.push_back(de->d_name);
-
-		printf("%s\n", de->d_name);
 	}
 	closedir(dh);
 

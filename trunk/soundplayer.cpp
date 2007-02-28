@@ -41,9 +41,6 @@ SoundPlayer::SoundPlayer(EventListener *g) {
 	slicer->setBypass(true);
 	echo->setBypass(true);
 	reverb->setBypass(true);
-	
-	printf("Echo delay is: %f", 60.0 / (float)sound->getTempo() * 1000 / 2);
-
 
 	echo->setParameter(FMOD_DSP_ECHO_DELAY, 60.0 / (float)sound->getTempo() * 1000 / 2);
 	echo->setParameter(FMOD_DSP_ECHO_MAXCHANNELS, 2);
