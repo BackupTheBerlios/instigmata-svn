@@ -56,8 +56,7 @@ void Looper::intEvent(eventtype et, int data){
 	switch(et) {
 		case EVENT_CHANGE_TRG_COLOR:
 			trigger->changeColor(data);
-			if(!(loader->needsDisplay()))
-				trigger->quePaint();
+			trigger->quePaint();
 			break;
 	}
 }

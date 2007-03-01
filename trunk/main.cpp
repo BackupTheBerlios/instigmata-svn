@@ -86,7 +86,6 @@ int main(int argc, char *argv[]) {
 			if(!wsneedsredraw){
 				scare_mouse();
 				blit(screen, wsbuffer, 0, 0, 0, 0, 1024, 768);
-				workspace.paintIfNeeded();
 				unscare_mouse();
 				loader->paint();
 				wsneedsredraw = true;
