@@ -30,7 +30,7 @@ int outchannels)
 		if(fabs(inbuffer[i]) > lpeak)
 			lpeak = fabs(inbuffer[i]);
 		if(fabs(inbuffer[i + 1]) > rpeak)
-			rpeak = fabs(inbuffer[i]);
+			rpeak = fabs(inbuffer[i + 1]);
 		slicercounter++;
 		if(slicercounter >= (int)((60.0 / sound->getTempo() / 4 * sound->getSamplerate()) * 2)) {
 			slicercounter = 0;

@@ -11,8 +11,9 @@
 #define PLAYER_HPF_DEFAULT_CUTOFF 0.0
 #define PLAYER_DEFAULT_DISTORTION 0.0
 #define PLAYER_EQ1_DEFAULT_CENTER 0.05
+#define PLAYER_DEFAULT_PAN 0.5
 // #define PLAYER_EQ1_DEFAULT_GAIN 0.32203389
-#define PLAYER_EQ1_DEFAULT_GAIN 0.
+// #define PLAYER_EQ1_DEFAULT_GAIN 0.
 
 
 
@@ -27,6 +28,7 @@ class SoundPlayer : public EventListener {
 	FMOD::DSP *echo;
 	FMOD::DSP *reverb;
 	FMOD::DSP *amp;
+	FMOD::DSP *pan;
 	
 	double vc;
 	double vol;

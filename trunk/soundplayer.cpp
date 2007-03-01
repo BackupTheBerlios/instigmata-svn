@@ -4,6 +4,7 @@
 #include "distortion.h"
 #include "slicer.h"
 #include "amp.h"
+#include "pan.h"
 #include <allegro.h>
 #include <math.h>
 
@@ -29,10 +30,12 @@ SoundPlayer::SoundPlayer(EventListener *g) {
 	distortion = getDistortion();
 	slicer = getSlicer();
 	amp = getAmp();
+	pan = getPanner();
 	
 	cg->addDSP(amp);
 	cg->addDSP(reverb);
 	cg->addDSP(echo);
+	cg->addDSP(pan);
 	cg->addDSP(lowpass);
 	cg->addDSP(hipass);
 	ERRCHECK(cg->addDSP(distortion));
@@ -52,6 +55,7 @@ SoundPlayer::SoundPlayer(EventListener *g) {
 	hipass->setParameter(FMOD_DSP_HIGHPASS_CUTOFF, OPTLPFCO(PLAYER_HPF_DEFAULT_CUTOFF));
 	distortion->setParameter(0, PLAYER_DEFAULT_DISTORTION);
 	amp->setParameter(0, PLAYER_DEFAULT_VOLUME);
+	pan->setParameter(0, PLAYER_DEFAULT_PAN * 2 - 1);
 
 	this->gui = g;
 }
@@ -88,6 +92,9 @@ void SoundPlayer::doubleEvent(eventtype et, double data){
 	switch(et){
 		case EVENT_CHANGE_VOLUME:
 			cg->setVolume(data);
+			break;
+		case EVENT_CHANGE_PAN:
+			pan->setParameter(0, (data * 2) - 1);
 			break;
 		case EVENT_CHANGE_POST_VOLUME:
 			amp->setParameter(0, data);

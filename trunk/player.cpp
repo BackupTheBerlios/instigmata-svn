@@ -22,6 +22,7 @@ Player::Player(int y, int color)
 	addFX(new Slider(fxpos, "HPF", EVENT_CHANGE_HPF_CUTOFF, this, PLAYER_HPF_DEFAULT_CUTOFF, 0.01, SLIDER_LOGARITHMIC));
 	addFX(new Slider(fxpos, "DST", EVENT_CHANGE_DISTORTION, this, PLAYER_DEFAULT_DISTORTION, 0.01, SLIDER_ANTILOGARITHMIC));
 	addFX(new Slider(fxpos, "VOL", EVENT_CHANGE_POST_VOLUME, this, PLAYER_DEFAULT_VOLUME, 0.01, SLIDER_LOGARITHMIC));
+	addFX(new Slider(fxpos, "PAN", EVENT_CHANGE_PAN, this, PLAYER_DEFAULT_PAN, 0.01, SLIDER_LINEAR));
 	addChild(new Button(fxpos, 3, 33, 24, COLOR_DEFAULT_BUTTON, false, "SLC", player, EVENT_TOGGLE_SLICER));
 	addChild(new Button(fxpos, 27, 33, 24, COLOR_DEFAULT_BUTTON, false, "ECH", player, EVENT_TOGGLE_ECHO));
 	addChild(new Button(fxpos, 51, 33, 24, COLOR_DEFAULT_BUTTON, false, "RVB", player, EVENT_TOGGLE_REVERB));
