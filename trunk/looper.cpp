@@ -29,7 +29,7 @@ Looper::Looper(int x, int color, EventListener *player)
 void Looper::strEvent(eventtype et, char *data) {
 	// currently catches only sample load
 	quePaint();
-	looper->strEvent(EVENT_SAMPLE_LOAD, data);
+	//looper->strEvent(EVENT_SAMPLE_LOAD, data);
 	if(sampleName != 0)
 		free(sampleName);
 	if(dirName != 0)
@@ -50,6 +50,10 @@ void Looper::strEvent(eventtype et, char *data) {
 		*(data+11) = 0;
 
 	dirName = strdup(data);
+}
+
+void Looper::voidEvent(eventtype et, void *data) {
+	looper->voidEvent(EVENT_SAMPLE_LOAD, data);
 }
 
 void Looper::intEvent(eventtype et, int data){

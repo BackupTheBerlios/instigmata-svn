@@ -100,6 +100,7 @@ void Loader::chooseSample(int i){
 	char *name = (char *)malloc(2048 * sizeof(char));
 	snprintf(name, 2047, "samples/%s/%s", current_dir->getName(), current_dir->getSample(i));
 	demander->strEvent(EVENT_SAMPLE_LOAD, name);
+	demander->voidEvent(EVENT_SAMPLE_LOAD, current_dir->getMemorySample(i));
 }
 
 void Loader::getSample(EventListener *s){

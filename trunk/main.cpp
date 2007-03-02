@@ -15,15 +15,15 @@
 
 #define NUMBER_PLAYERS 8
 
-Loader *loader = new Loader();
 SoundCore *sound = new SoundCore();
+Loader *loader;
 Logger *logg = new Logger("error.log");
 
 int main(int argc, char *argv[]) {
 	
 	struct sched_param scp;
 
-	scp.sched_priority = 70;
+	scp.sched_priority = 60;
 
 	sched_setscheduler(0, SCHED_FIFO, &scp);
 	mlockall(MCL_FUTURE);
@@ -48,7 +48,13 @@ int main(int argc, char *argv[]) {
 	workspace.addChild(&bc);
 	workspace.addChild(new PeakMeter(907, 50));
 
+	BITMAP *splash = load_bitmap("splash.bmp", 0);
+	blit(splash, screen, 0, 0, 0, 0, 1024, 768);
+	destroy_bitmap(splash);
 	sound->init(162, &bc); // FIXME changing tempo.
+
+	loader = new Loader();
+
 	for(int i = 0; i < NUMBER_PLAYERS; i++){
 		workspace.addChild(new Player(96 * i, COLOR_PLAYER));
 		sound->update();

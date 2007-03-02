@@ -28,6 +28,7 @@ class SoundLooper : public EventListener {
 	public:
 	SoundLooper(FMOD::ChannelGroup *cg, EventListener *);
 	void strEvent(eventtype et, char *data);
+	void voidEvent(eventtype et, void *data);
 	void intEvent(eventtype et, int data);
 	void emptyEvent(eventtype et);
 	void bar();

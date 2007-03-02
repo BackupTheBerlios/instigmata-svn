@@ -14,7 +14,8 @@ SoundLooper::SoundLooper(FMOD::ChannelGroup *cg, EventListener *gui) {
 }
 
 void SoundLooper::loadSample(char *fname) {
-	ERRCHECK(sound->system->createSound(fname, FMOD_SOFTWARE|FMOD_LOOP_OFF|FMOD_NONBLOCKING, 0, &sample));
+	sound->update();
+	ERRCHECK(sound->system->createSound(fname, FMOD_NONBLOCKING, 0, &sample));
 	gui->intEvent(EVENT_CHANGE_TRG_COLOR, COLOR_TRG_IDLE);
 	status = LOOPER_IDLE;
 }
@@ -22,6 +23,14 @@ void SoundLooper::loadSample(char *fname) {
 void SoundLooper::strEvent(eventtype et, char *data){
 	if(et == EVENT_SAMPLE_LOAD) {
 		loadSample(data);
+	}
+}
+
+void SoundLooper::voidEvent(eventtype et, void *data){
+	if(et == EVENT_SAMPLE_LOAD) {
+		sample = (FMOD::Sound *)data;
+		gui->intEvent(EVENT_CHANGE_TRG_COLOR, COLOR_TRG_IDLE);
+		status = LOOPER_IDLE;
 	}
 }
 

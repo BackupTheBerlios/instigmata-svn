@@ -21,8 +21,13 @@ SampleDir::SampleDir(const char *d) {
 	smpllist.sort();
 
 	while(smpllist.size() > 0) {
+		sound->update();
 		std::string str = smpllist.front();
 		samples.push_back(strdup(str.c_str()));
+		FMOD::Sound *sample;
+		std::string whole = std::string(path) + "/" + str;
+		ERRCHECK(sound->system->createSound(whole.c_str(), FMOD_SOFTWARE, 0, &sample));
+		rsamples.push_back(sample);
 		smpllist.pop_front();
 	}
 }
@@ -31,4 +36,10 @@ char *SampleDir::getSample(int i) {
 	if(i >= samples.size())
 		return NULL;
 	return samples[i];
+}
+
+void *SampleDir::getMemorySample(int i) {
+	if(i >= samples.size())
+		return NULL;
+	return (void *)rsamples[i];
 }

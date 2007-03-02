@@ -19,6 +19,7 @@ class Looper
 	Looper(int y, int c, EventListener *);
 	void emptyEvent(eventtype et);
 	void strEvent(eventtype et, char *data);
+	void voidEvent(eventtype et, void *data);
 	void intEvent(eventtype et, int data);
 	void paint();
 };

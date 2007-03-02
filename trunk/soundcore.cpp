@@ -61,7 +61,9 @@ void SoundCore::init(int tempo, BarCounter *bc) {
 
 	ERRCHECK(system->setDSPBufferSize(granularity, 4));
 	ERRCHECK(system->init(64, FMOD_INIT_NORMAL, 0));
-	
+
+	printf("Granularity: %i\n", granularity);
+
 	FMOD_DSP_DESCRIPTION tdsp;
 
 	memset(&tdsp, 0, sizeof(tdsp));
